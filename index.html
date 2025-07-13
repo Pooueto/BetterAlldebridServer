@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BetterAlldebrid Localhost Powershell API, designed for true comrade</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>BetterAlldebrid Localhost Powershell API, designed for true comrade</h1>
+        <form id="debridForm">
+            <label for="linkInput">Collez vos liens à débrider ici (un par ligne) :</label>
+            <textarea id="linkInput" name="links" rows="10" placeholder="Ex:
+            https://1fichier.com/votre_lien1
+            https://uptobox.com/votre_lien2
+            ..." required></textarea>
+            <button type="submit">Débrider et Télécharger</button>
+        </form>
+        <div id="responseMessage"></div>
+        <div id="processingStatus" style="margin-top: 15px; font-weight: bold;"></div>
+    </div>
+
+    <script src="/script.js"></script>
+</body>
+</html>
