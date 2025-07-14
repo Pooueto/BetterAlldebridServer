@@ -3,9 +3,27 @@ document.getElementById('debridForm').addEventListener('submit', async function(
 
     const linkInput = document.getElementById('linkInput');
     const responseMessage = document.getElementById('responseMessage');
-    const processingStatus = document.getElementById('processingStatus'); // Référence au nouvel élément de statut
+    const processingStatus = document.getElementById('processingStatus');
 
-    // Réinitialisation des messages d'état
+    // Références aux éléments audio et au bouton de musique
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    const musicToggleButton = document.getElementById('musicToggleButton');
+
+    // *** LOGIQUE DE LECTURE MUSICALE AU CLIC DU BOUTON DE TÉLÉCHARGEMENT ***
+    // Lance la musique si elle est en pause (au moment où le bouton de téléchargement est cliqué)
+    if (backgroundMusic.paused) {
+        backgroundMusic.play().catch(error => {
+            console.error("Erreur lors de la lecture de la musique au clic sur le bouton de débridage :", error);
+            // Vous pouvez afficher un message à l'utilisateur ici si la lecture est bloquée
+            // Ex: alert("La lecture automatique de la musique est bloquée par le navigateur. Veuillez utiliser le bouton 'Play Music'.");
+        });
+        // Si le bouton de contrôle de musique dédié existe, met à jour son texte
+        if (musicToggleButton) {
+            musicToggleButton.textContent = 'Pause Music';
+        }
+    }
+
+    // Réinitialisation des messages d'état pour le formulaire
     responseMessage.className = 'info'; // Met une classe par défaut (bleue)
     responseMessage.innerHTML = 'Traitement en cours...'; // Utilise innerHTML pour pouvoir ajouter des <p> plus tard
     processingStatus.textContent = ''; // Réinitialise le statut de traitement
@@ -32,7 +50,7 @@ document.getElementById('debridForm').addEventListener('submit', async function(
 
         let linkToDebrid = rawLink; // Utilise le lien brut de la liste pour le nettoyage
 
-        // Appliquer la logique de nettoyage du lien (Option 2 - comme on l'a vu précédemment)
+        // Appliquer la logique de nettoyage du lien
         const httpIndex = linkToDebrid.indexOf('http://');
         const httpsIndex = linkToDebrid.indexOf('https://');
 
@@ -98,3 +116,26 @@ document.getElementById('debridForm').addEventListener('submit', async function(
         responseMessage.textContent = 'Aucun lien n\'a pu être traité avec succès. Voir les détails ci-dessous.';
     }
 });
+
+// *** LOGIQUE DE CONTRÔLE MUSICALE POUR LE BOUTON DÉDIÉ ***
+// Cette partie permet de contrôler la musique indépendamment via le bouton "Play/Pause Music"
+const backgroundMusic = document.getElementById('backgroundMusic');
+const musicToggleButton = document.getElementById('musicToggleButton');
+// Note: La variable 'isPlaying' est gérée par l'état `paused` de l'élément audio lui-même,
+// mais elle peut être utile pour synchroniser l'état du bouton si vous avez des interactions complexes.
+
+if (musicToggleButton) { // S'assure que le bouton existe avant d'ajouter l'écouteur
+    musicToggleButton.addEventListener('click', () => {
+        if (backgroundMusic.paused) { // Vérifie si la musique est en pause
+            backgroundMusic.play().catch(error => {
+                console.error("Erreur lors de la lecture de la musique via le bouton dédié :", error);
+                // Gérer les erreurs, par exemple, afficher un message d'erreur
+            });
+            musicToggleButton.textContent = 'Pause Music';
+        } else {
+            backgroundMusic.pause();
+            musicToggleButton.textContent = 'Play Music';
+        }
+        // Pas besoin de toggler une variable isPlaying ici si on se base directement sur backgroundMusic.paused
+    });
+}
